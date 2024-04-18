@@ -1,23 +1,20 @@
-package com.leon.studentapp.model
-
-import com.google.gson.annotations.SerializedName
+package com.leon.hobbyapp.model
 
 data class User(
-    val id: Int,
-    val username: String,
-    val email: String,
-    val password: String,
-    val firstName: String,
-    val lastName: String
+    val id: Int?,
+    val username: String?,
+    val firstName: String?,
+    val lastName: String?,
+    val email: String?,
+    val password: String?,
 )
 
-data class News(
-    val id: Int,
-    val title: String,
-    val imageUrl: String,
-    val description: String,
-    val createdBy: String,
-    val date: String,
-    val content: List<String>
+data class Hobby(
+    val id: Int?,
+    val title: String?,
+    val createdBy: String?,
+    val imageUrl: String?,
+    val description: String?,
+    val content: String?,
 )
 

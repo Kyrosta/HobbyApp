@@ -6,22 +6,26 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/studentListFragment"
-        android:name="com.leon.studentapp.view.StudentListFragment"
-        android:label="fragment_student_list"
-        tools:layout="@layout/fragment_student_list" >
+        android:id="@+id/loginFragment"
+        android:name="com.leon.hobbyapp.view.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/actionStudentDetail"
-            app:destination="@id/studentDetailFragment" />
+            android:id="@+id/actionRegisterFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/studentDetailFragment"
-        android:name="com.leon.studentapp.view.StudentDetailFragment"
-        android:label="fragment_student_detail"
-        tools:layout="@layout/fragment_student_detail" >
-        <argument
-            android:name="studentid"
-            app:argType="string" />
+        android:id="@+id/registerFragment"
+        android:name="com.leon.hobbyapp.view.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/actionLoginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment" />
+        <action
+            android:id="@+id/homeFragmentAction"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -29,21 +33,19 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_beritaDetilFragment"
-            app:destination="@id/beritaDetilFragment" />
+            android:id="@+id/actionDetailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.leon.hobbyapp.view.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:id="@+id/detailFragment"
+        android:name="com.leon.hobbyapp.view.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
+            android:id="@+id/actionItemHome"
             app:destination="@id/homeFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/beritaDetilFragment"
-        android:name="com.leon.hobbyapp.view.BeritaDetilFragment"
-        android:label="fragment_berita_detil"
-        tools:layout="@layout/fragment_berita_detil" />
 </navigation>
