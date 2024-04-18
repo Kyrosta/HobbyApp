@@ -6,16 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.leon.hobbyapp.R
 import com.leon.hobbyapp.databinding.FragmentDetailBinding
-import com.leon.hobbyapp.viewmodel.DetailViewModel
+import com.leon.hobbyapp.viewmodel.ListViewModel
 import com.squareup.picasso.Picasso
-import io.reactivex.rxjava3.core.Observer
 
 class DetailFragment : Fragment() {
     private lateinit var binding:FragmentDetailBinding
-    private lateinit var viewModel: DetailViewModel
+    private lateinit var viewModel: ListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,60 +29,55 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         if (arguments != null) {
             val id = DetailFragmentArgs.fromBundle(requireArguments()).id
-            viewModel.fetch(id)
+            viewModel.detail(id)
         }
 
         observeViewModel()
     }
 
     fun observeViewModel() {
-        viewModel.dataLD.observe(viewLifecycleOwner, Observer {
-            with (binding) {
-                HomeActivity.load_picture(requireView(), it.photo_url.toString(), imgPhotoDetail)
-                var now_index = 0
-                txtTitle.text = it.title
-                txtUsername.text = "Dibuat oleh ${it.creator}"
-                val content_per_paragraph = it.content?.split("\n")
-                Log.d("cekdata", content_per_paragraph.toString())
-                val size_par = content_per_paragraph?.size
+        viewModel.hobbyLD.observe(viewLifecycleOwner, Observer { hobbies ->
+            if (hobbies.isNotEmpty()) {
+                val hobby = hobbies[0]
+                binding.txtTitle.text = hobby.title
+                binding.txtUsername.text = "@${hobby.createdBy}"
 
-                txtContent.text = content_per_paragraph?.get(now_index)
-                checkPageNow(now_index, size_par!!.toInt())
+                val wordLimitPerPage = 50
+                val words = hobby.content?.split(" ") ?: listOf()
+                val pages = words.chunked(wordLimitPerPage).map { it.joinToString(" ") }
 
-                btnNext.setOnClickListener {
-                    now_index++
-                    txtContent.text = content_per_paragraph[now_index]
-                    checkPageNow(now_index, size_par.toInt())
+                var currentPageIndex = 0
+                displayPage(currentPageIndex, pages)
+
+                binding.btnPrev.isEnabled = false
+                binding.btnNext.isEnabled = pages.size > 1
+
+                binding.btnNext.setOnClickListener {
+                    currentPageIndex++
+                    displayPage(currentPageIndex, pages)
+                    buttonState(currentPageIndex, pages.size)
                 }
 
-                btnPrev.setOnClickListener {
-                    now_index--
-                    txtContent.text = content_per_paragraph[now_index]
-                    checkPageNow(now_index, size_par.toInt())
+                binding.btnPrev.setOnClickListener {
+                    currentPageIndex--
+                    displayPage(currentPageIndex, pages)
+                    buttonState(currentPageIndex, pages.size)
                 }
             }
         })
     }
 
-    fun checkPageNow(now_index: Int, size_par: Int) {
-        with (binding) {
-            when (now_index) {
-                0 -> {
-                    btnPrev.isEnabled = false
-                    btnNext.isEnabled = true
-                }
-                size_par.minus(1) -> {
-                    btnPrev.isEnabled = true
-                    btnNext.isEnabled = false
-                }
-                else -> {
-                    btnPrev.isEnabled = true
-                    btnNext.isEnabled = true
-                }
-            }
+    fun displayPage(index: Int, pages: List<String>) {
+        if (index >= 0 && index < pages.size) {
+            binding.txtDesc.text = pages[index]
         }
+    }
+
+    fun buttonState(currentPageIndex: Int, pageCount: Int) {
+        binding.btnPrev.isEnabled = currentPageIndex > 0
+        binding.btnNext.isEnabled = currentPageIndex < pageCount - 1
     }
 }

@@ -12,19 +12,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.leon.hobbyapp.R
 import com.leon.hobbyapp.databinding.ActivityMainBinding
+import com.leon.hobbyapp.model.User
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
-    companion object {
-        fun getSharedPref(activity: Activity): String? {
-            val shared = activity.packageName
-            val sharedPref: SharedPreferences = activity.getSharedPreferences(shared, Context.MODE_PRIVATE)
-            val result = sharedPref.getString("KEY_USER", "")
-            Log.d("check", result.toString())
-            return result
-        }
+    companion object{
+        var user: User? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +30,6 @@ class MainActivity : AppCompatActivity() {
 
 //        navController = (supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment).navController
 //        NavigationUI.setupActionBarWithNavController(this, navController)
-
-        if (getSharedPref(this) != "") {
-            val intent = Intent(this, HomeFragment::class.java)
-            startActivity(intent)
-            finish()
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

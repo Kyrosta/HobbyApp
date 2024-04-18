@@ -6,67 +6,59 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.leon.hobbyapp.databinding.FragmentProfilBinding
-import com.leon.hobbyapp.viewmodel.ListViewModel
+import com.leon.hobbyapp.model.User
+import com.leon.hobbyapp.viewmodel.UserViewModel
 
 class ProfilFragment : Fragment() {
-    private lateinit var bind: FragmentProfilBinding
-    private lateinit var viewModel: ListViewModel
+    private lateinit var binding: FragmentProfilBinding
+    private lateinit var viewModel: UserViewModel
     private lateinit var navController: NavController
-    var user: User? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        bind = FragmentProfilBinding.inflate(layoutInflater, container, false)
-        return bind.root
+        binding = FragmentProfilBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        user = MainActivity.user
-        if (user != null) {
-            bind.txtChangeFName.setText(user!!.nama_depan)
-            bind.txtChangeLName.setText(user!!.nama_belakang)
+        viewModel.userLD.observe(viewLifecycleOwner, Observer { user ->
+            if (user != null) {
+                binding.txtChangeFName.setText(user.firstName)
+                binding.txtChangeLName.setText(user.lastName)
 
-            bind.btnChange.setOnClickListener {
-                if(bind.txtCurrentPass.text.toString() == user?.password){
-                    user?.nama_depan=bind.txtDepan.text.toString()
-                    user?.nama_belakang=bind.txtDepan.text.toString()
-                    if(bind.txtNewPass.text.toString() != ""){
-                        user?.password=bind.txtNewPass.text.toString()
-                    }
+                binding.btnUpdate.setOnClickListener {
+                    val firstName = binding.txtChangeFName.text.toString()
+                    val lastName = binding.txtChangeLName.text.toString()
+                    val newPassword = binding.txtChangePassword.text.toString()
 
-                    viewModel.update(user!!)
-                    observeViewModel()
-                }
-                else{
-                    Toast.makeText(this.context, "Wrong password", Toast.LENGTH_SHORT).show()
+                    viewModel.update(firstName, lastName, newPassword)
                 }
             }
+        })
 
-        }
-        bind.btnLogout.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
             MainActivity.user = null
             Navigation.findNavController(it).navigateUp()
         }
-
     }
 
-    fun observeViewModel(){
-        viewModel.successLD.observe(viewLifecycleOwner, Observer {
-            if (it != false){
-                Toast.makeText(this.context, "Profile updated", Toast.LENGTH_SHORT).show()
-                MainActivity.user = user
-            }
-            else{
-                Toast.makeText(this.context, "Update failed", Toast.LENGTH_SHORT).show()
+    fun observeViewModel() {
+        viewModel.successLD.observe(viewLifecycleOwner, Observer { success ->
+            if (success != false) {
+                Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()
             }
         })
     }
