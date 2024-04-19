@@ -1,5 +1,6 @@
 package com.leon.hobbyapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.leon.hobbyapp.R
 import com.leon.hobbyapp.databinding.FragmentProfilBinding
 import com.leon.hobbyapp.model.User
 import com.leon.hobbyapp.viewmodel.UserViewModel
@@ -42,20 +44,21 @@ class ProfilFragment : Fragment() {
                     val lastName = binding.txtChangeLName.text.toString()
                     val newPassword = binding.txtChangePassword.text.toString()
 
-                    viewModel.update(firstName, lastName, newPassword)
+                    viewModel.update(id,firstName, lastName, newPassword)
                 }
             }
         })
 
         binding.btnLogout.setOnClickListener {
-            MainActivity.user = null
             Navigation.findNavController(it).navigateUp()
+            val navController = Navigation.findNavController(requireActivity(), R.id.main_navigation_xml)
+            navController.navigate(R.id.actionLogoutFragment)
         }
     }
 
     fun observeViewModel() {
-        viewModel.successLD.observe(viewLifecycleOwner, Observer { success ->
-            if (success != false) {
+        viewModel.userLD.observe(viewLifecycleOwner, Observer { success ->
+            if (success != null) {
                 Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()

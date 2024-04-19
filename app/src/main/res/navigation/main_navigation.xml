@@ -47,12 +47,12 @@
         android:name="com.leon.hobbyapp.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
-        <argument
-            android:name="id"
-            app:argType="integer" />
         <action
             android:id="@+id/actionItemHome"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profilFragment"
@@ -62,4 +62,7 @@
             android:id="@+id/actionLogoutFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <argument
+        android:name="id"
+        app:argType="string" />
 </navigation>
