@@ -30,10 +30,10 @@ class HobbyListAdapter(val hobbyList: ArrayList<Hobby>)
 
         val picasso = Picasso.Builder(holder.binding.root.context)
         picasso.listener{picasso, uri, exception -> exception.printStackTrace()}
-        picasso.build().load(currHobby.imageUrl).into(holder.binding.imgPhoto)
+        picasso.build().load(hobbyList[position].imageUrl).into(holder.binding.imgPhoto)
 
         holder.binding.btnDetail.setOnClickListener {
-            val action = HomeFragmentDirections.actionDetailFragment(currHobby.id.toString())
+            val action = HomeFragmentDirections.actionDetailFragment(currHobby.id.toString().toInt())
             Navigation.findNavController(it).navigate(action)
         }
 

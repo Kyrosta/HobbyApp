@@ -19,7 +19,6 @@ import com.leon.hobbyapp.viewmodel.UserViewModel
 class ProfilFragment : Fragment() {
     private lateinit var binding: FragmentProfilBinding
     private lateinit var viewModel: UserViewModel
-    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,26 +33,32 @@ class ProfilFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        viewModel.userLD.observe(viewLifecycleOwner, Observer { user ->
-            if (user != null) {
-                binding.txtChangeFName.setText(user.firstName)
-                binding.txtChangeLName.setText(user.lastName)
+        viewModel.signin("username","password") //memanggil data user
+        viewModel.userLD.observe(viewLifecycleOwner, Observer {user->
+            user?.let{
+                binding.txtChangeFName.setText(it.firstName)
+                binding.txtChangeLName.setText(it.lastName)
 
                 binding.btnUpdate.setOnClickListener {
                     val firstName = binding.txtChangeFName.text.toString()
                     val lastName = binding.txtChangeLName.text.toString()
                     val newPassword = binding.txtChangePassword.text.toString()
 
-                    viewModel.update(id,firstName, lastName, newPassword)
+                    viewModel.update(it.id,firstName, lastName, newPassword)
+                    observeViewModel()
                 }
             }
         })
-
         binding.btnLogout.setOnClickListener {
+            logout()
             Navigation.findNavController(it).navigateUp()
             val navController = Navigation.findNavController(requireActivity(), R.id.main_navigation_xml)
             navController.navigate(R.id.actionLogoutFragment)
         }
+    }
+
+    fun logout(){
+        viewModel.userLD.value = null
     }
 
     fun observeViewModel() {

@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.leon.hobbyapp.databinding.FragmentDetailBinding
 import com.leon.hobbyapp.model.Hobby
 import com.leon.hobbyapp.viewmodel.DetailViewModel
+import com.leon.hobbyapp.viewmodel.ListViewModel
+import com.squareup.picasso.Picasso
 
 class DetailFragment : Fragment() {
     private lateinit var binding:FragmentDetailBinding
@@ -28,18 +30,22 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null){
-            viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-            viewModel.detail(DetailFragmentArgs.fromBundle(requireArguments()).id)
-            observeViewModel()
-        }
+        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        val id = DetailFragmentArgs.fromBundle(requireArguments()).id
+        viewModel.detail(id)
+        observeViewModel()
     }
 
     fun observeViewModel() {
         viewModel.hobbyDetailLD.observe(viewLifecycleOwner, Observer {
             binding.apply {
+                val picasso = Picasso.Builder(binding.root.context)
+                picasso.listener{picasso, uri, exception -> exception.printStackTrace()}
+                picasso.build().load(it.imageUrl).into(binding.imgPhoto)
+
                 txtTitle.text = it.title
                 txtUsername.text = "@${it.createdBy}"
+                txtDesc.text = it.content
 
                 val wordLimitPerPage = 50
                 val words = it.content?.split(" ") ?: listOf()

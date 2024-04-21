@@ -41,6 +41,9 @@
         <action
             android:id="@+id/actionProfileFragment"
             app:destination="@id/profilFragment" />
+        <action
+            android:id="@+id/actionHistoryFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -52,7 +55,7 @@
             app:destination="@id/homeFragment" />
         <argument
             android:name="id"
-            app:argType="string" />
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/profilFragment"
@@ -65,4 +68,9 @@
     <argument
         android:name="id"
         app:argType="string" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.leon.hobbyapp.view.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

@@ -10,7 +10,7 @@ data class User(
 )
 
 data class Hobby(
-    val id: String?,
+    val id: Int?,
     val title: String?,
     val createdBy: String?,
     val imageUrl: String?,

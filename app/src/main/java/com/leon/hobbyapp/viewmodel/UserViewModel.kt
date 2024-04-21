@@ -27,31 +27,33 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     val TAG = "volleyTag"
     private var queue: RequestQueue? = null
 
-//    fun signin(user: String, pass: String) {
-//        loadingLD.value = true
-//        userErrorLD.value = false
-//
-//        queue = Volley.newRequestQueue(getApplication())
-//        val url = "http://10.0.2.2/hobbyapp/login.php?username=$user&password=$pass"
-//
-//        val stringRequest = StringRequest(
-//            Request.Method.GET, url,
-//            {
-//                val sType = object: TypeToken<User>() {}.type
-//                val result = Gson().fromJson<User>(it, sType)
-//                userLD.value = result
-//                loadingLD.value = false
-//                Log.d("showvolley", it)
-//            },
-//            {
-//                Log.d("showvolley", it.toString())
-//                userErrorLD.value = true
-//                loadingLD.value = false
-//            })
-//
-//        stringRequest.tag = TAG
-//        queue?.add(stringRequest)
-//    }
+/*
+    fun signin(user: String, pass: String) {
+        loadingLD.value = true
+        userErrorLD.value = false
+
+        queue = Volley.newRequestQueue(getApplication())
+        val url = "http://10.0.2.2/hobbyapp/login.php?username=$user&password=$pass"
+
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            {
+                val sType = object: TypeToken<User>() {}.type
+                val result = Gson().fromJson<User>(it, sType)
+                userLD.value = result
+                loadingLD.value = false
+                Log.d("showvolley", it)
+            },
+            {
+                Log.d("showvolley", it.toString())
+                userErrorLD.value = true
+                loadingLD.value = false
+            })
+
+        stringRequest.tag = TAG
+        queue?.add(stringRequest)
+    }
+*/
 
     fun signin(username: String, password: String) {
         val url = "http://10.0.2.2/hobbyapp/login.php"
@@ -78,92 +80,92 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         queue?.add(stringRequest)
     }
 
-
-
-//    fun register(id: Int, username:String, firstName: String, lastName: String, email: String, password: String){
-//        loadingLD.value = true
-//        userErrorLD.value = false
-//
-//        queue = Volley.newRequestQueue(getApplication())
-//        val url = "http://10.0.2.2/hobbyapp/register.php?id=$id&username=$username&firstname=$firstName&lastname=$lastName&email=$email&password=$password"
-//        Log.d("url", url)
-//        val stringRequest = StringRequest(
-//            Request.Method.GET, url,
-//            {
-//                val sType = object: TypeToken<User>() {}.type
-//                val result = Gson().fromJson<User>(it, sType)
-//                successLD.value = result
-//                loadingLD.value = false
-//                Log.d("showvolley", it)
-//            },
-//            {
-//                Log.d("showvolley", it.toString())
-//                userErrorLD.value = true
-//                loadingLD.value = false
-//            })
-//
-//        stringRequest.tag = TAG
-//        queue?.add(stringRequest)
-//    }
-
-    fun register(username:String, firstName: String, lastName: String, email: String, password: String){
+/*
+    fun register(id: Int, username:String, firstName: String, lastName: String, email: String, password: String){
+        loadingLD.value = true
+        userErrorLD.value = false
 
         queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/register.php"
-        val stringRequest = object : StringRequest(
-            Method.POST, url,
-            {response->
-                registerLD.value = true
-                Log.d("Register", "Result: ${response}")
+        val url = "http://10.0.2.2/hobbyapp/register.php?id=$id&username=$username&firstname=$firstName&lastname=$lastName&email=$email&password=$password"
+        Log.d("url", url)
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            {
+                val sType = object: TypeToken<User>() {}.type
+                val result = Gson().fromJson<User>(it, sType)
+                successLD.value = result
+                loadingLD.value = false
+                Log.d("showvolley", it)
             },
             {
-                registerLD.value = false
-                Log.d("Register", it.toString())
-            }
-        ) {
-            override fun getParams(): MutableMap<String, String> {
-                val params = HashMap<String, String>()
-                params["username"] = username
-                params["firstname"] = firstName
-                params["lastname"] = lastName
-                params["email"] = email
-                params["password"] = password
-                return params
-            }
-        }
+                Log.d("showvolley", it.toString())
+                userErrorLD.value = true
+                loadingLD.value = false
+            })
+
         stringRequest.tag = TAG
         queue?.add(stringRequest)
     }
+*/
 
-    fun update(id:Int, firstName: String, lastName: String, newPassword: String){
+fun register(username:String, firstName: String, lastName: String, email: String, password: String){
 
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/update.php"
-        val stringRequest = object : StringRequest(
-            Method.POST, url,{response->
-                updateLD.value = true
-                Log.d("Update", "Result: ${response}")
-            },
-            {
-                updateLD.value = false
-                Log.d("Update", it.toString())
-            }
-        ){
-            override fun getParams(): MutableMap<String, String>? {
-                val params = HashMap<String, String>()
-                params["id"] = id.toString()
-                params["firstName"] = firstName
-                params["lastName"] = lastName
-                params["password"] = newPassword
-                return params
-            }
+    queue = Volley.newRequestQueue(getApplication())
+    val url = "http://10.0.2.2/hobbyapp/register.php"
+    val stringRequest = object : StringRequest(
+        Method.POST, url,
+        {response->
+            registerLD.value = true
+            Log.d("Register", "Result: ${response}")
+        },
+        {
+            registerLD.value = false
+            Log.d("Register", it.toString())
         }
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
+    ) {
+        override fun getParams(): MutableMap<String, String> {
+            val params = HashMap<String, String>()
+            params["username"] = username
+            params["firstname"] = firstName
+            params["lastname"] = lastName
+            params["email"] = email
+            params["password"] = password
+            return params
+        }
     }
+    stringRequest.tag = TAG
+    queue?.add(stringRequest)
+}
 
-    override fun onCleared() {
-        super.onCleared()
-        queue?.cancelAll(TAG)
+fun update(id:Int, firstName: String, lastName: String, newPassword: String){
+
+    queue = Volley.newRequestQueue(getApplication())
+    val url = "http://10.0.2.2/hobbyapp/update.php"
+    val stringRequest = object : StringRequest(
+        Method.POST, url,{response->
+            updateLD.value = true
+            Log.d("Update", "Result: ${response}")
+        },
+        {
+            updateLD.value = false
+            Log.d("Update", it.toString())
+        }
+    ){
+        override fun getParams(): MutableMap<String, String>? {
+            val params = HashMap<String, String>()
+            params["id"] = id.toString()
+            params["firstName"] = firstName
+            params["lastName"] = lastName
+            params["password"] = newPassword
+            return params
+        }
     }
+    stringRequest.tag = TAG
+    queue?.add(stringRequest)
+}
+
+override fun onCleared() {
+    super.onCleared()
+    queue?.cancelAll(TAG)
+}
 }

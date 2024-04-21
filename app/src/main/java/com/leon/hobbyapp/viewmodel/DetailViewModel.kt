@@ -9,39 +9,32 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.leon.hobbyapp.model.Hobby
 
 class DetailViewModel(application: Application):AndroidViewModel(application) {
     val hobbyDetailLD = MutableLiveData<Hobby>()
-    val loadingLD = MutableLiveData<Boolean>()
-    val errorLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
     private var queue: RequestQueue? = null
 
-    fun detail(id: String){
-        loadingLD.value = true
-        errorLD.value = false
+    fun detail(id: Int){
 
         queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/detail.php?id=${id}"
+        val url = "http://10.0.2.2/hobbyapp/hobby.json?id=$id"
 
         val stringRequest = StringRequest(
             Request.Method.GET, url, {
-                hobbyDetailLD.value = Gson().fromJson(it, Hobby::class.java)
-                Log.d("ShowVolley", it)
+                Log.d("showvolley", it)
+                val sType = object : TypeToken<List<Hobby>>() { }.type
+                val result = Gson().fromJson<List<Hobby>>(it, sType)
+                val data = result as ArrayList<Hobby>
+                hobbyDetailLD.value = data[id-1]
             },
             {
-                Log.d("ShowVolley", it.toString())
+                Log.d("showvolley", it.toString())
             }
         )
         stringRequest.tag = TAG
         queue?.add(stringRequest)
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        queue?.cancelAll(TAG)
-    }
-
-
 }
