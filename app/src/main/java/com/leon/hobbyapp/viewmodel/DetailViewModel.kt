@@ -9,38 +9,31 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.leon.hobbyapp.model.Hobby
 
-class ListViewModel(application: Application): AndroidViewModel(application) {
-    val hobbyLD = MutableLiveData<ArrayList<Hobby>>()
+class DetailViewModel(application: Application):AndroidViewModel(application) {
+    val hobbyDetailLD = MutableLiveData<Hobby>()
     val loadingLD = MutableLiveData<Boolean>()
     val errorLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
     private var queue: RequestQueue? = null
 
-    fun refresh() {
+    fun detail(id: String){
         loadingLD.value = true
         errorLD.value = false
 
         queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/detail.php"
+        val url = "http://10.0.2.2/hobbyapp/detail.php?id=${id}"
 
         val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            {
-                val sType = object: TypeToken<List<Hobby>>() {}.type
-                val result = Gson().fromJson<List<Hobby>>(it, sType)
-                hobbyLD.value = result as ArrayList<Hobby>?
-                loadingLD.value = false
-                Log.d("showvolley", it)
+            Request.Method.GET, url, {
+                hobbyDetailLD.value = Gson().fromJson(it, Hobby::class.java)
+                Log.d("ShowVolley", it)
             },
             {
-                Log.d("showvolley", it.toString())
-                errorLD.value = false
-                loadingLD.value = false
-            })
-
+                Log.d("ShowVolley", it.toString())
+            }
+        )
         stringRequest.tag = TAG
         queue?.add(stringRequest)
     }
@@ -49,4 +42,6 @@ class ListViewModel(application: Application): AndroidViewModel(application) {
         super.onCleared()
         queue?.cancelAll(TAG)
     }
+
+
 }

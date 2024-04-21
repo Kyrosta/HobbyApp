@@ -17,7 +17,7 @@ import com.leon.hobbyapp.viewmodel.ListViewModel
 
 class HomeFragment : Fragment() {
 
-    private lateinit var bind: FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
     private val hobby = arrayListOf<Hobby>()
     private val adapter = HobbyListAdapter(hobby)
     private lateinit var viewModel : ListViewModel
@@ -25,8 +25,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        bind = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        return bind.root
+        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,16 +35,39 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         viewModel.refresh()
 
-        observeViewModel()
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = adapter
 
-        bind.recyclerView.layoutManager = LinearLayoutManager(context)
-        bind.recyclerView.adapter = adapter
+        binding.refreshLayout.setOnRefreshListener {
+            binding.recyclerView.visibility =View.GONE
+            binding.txtError.visibility = View.GONE
+            binding.progressLoad.visibility =View.VISIBLE
+            viewModel.refresh()
+            binding.refreshLayout.isRefreshing = false
+        }
+        observeViewModel()
     }
 
     fun observeViewModel(){
-        viewModel.hobbyLD.observe(viewLifecycleOwner, Observer {
-            Log.d("Data", it.toString())
-            adapter.updateHobby(it)
+        viewModel.hobbyLD.observe(viewLifecycleOwner, Observer { adapter.updateHobby(it) })
+        viewModel.loadingLD.observe(viewLifecycleOwner, Observer {
+            if(it == true){
+                binding.recyclerView.visibility = View.GONE
+                binding.progressLoad.visibility = View.VISIBLE
+            }
+            else{
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.progressLoad.visibility = View.GONE
+            }
+        })
+
+        viewModel.errorLD.observe(viewLifecycleOwner, Observer {
+            if(it == true){
+                binding.txtError.visibility = View.VISIBLE
+            }
+            else{
+                binding.txtError.visibility = View.GONE
+            }
         })
     }
 }

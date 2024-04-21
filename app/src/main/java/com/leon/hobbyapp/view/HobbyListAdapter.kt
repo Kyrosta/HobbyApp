@@ -1,7 +1,6 @@
 package com.leon.hobbyapp.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
@@ -28,22 +27,23 @@ class HobbyListAdapter(val hobbyList: ArrayList<Hobby>)
         holder.binding.txtTitle.text = currHobby.title
         holder.binding.txtUsername.text = currHobby.createdBy
         holder.binding.txtDesc.text = currHobby.description
-        val id = hobbyList[position].id
 
         val picasso = Picasso.Builder(holder.binding.root.context)
         picasso.listener{picasso, uri, exception -> exception.printStackTrace()}
         picasso.build().load(currHobby.imageUrl).into(holder.binding.imgPhoto)
 
         holder.binding.btnDetail.setOnClickListener {
-            val action = HomeFragmentDirections.actionDetailFragment(id)
+            val action = HomeFragmentDirections.actionDetailFragment(currHobby.id.toString())
             Navigation.findNavController(it).navigate(action)
         }
 
     }
-
-    fun updateHobby(newBeritaList: ArrayList<Hobby>){
+    fun updateHobby(newHobbyList: ArrayList<Hobby>){
         hobbyList.clear()
-        hobbyList.addAll(newBeritaList)
+        hobbyList.addAll(newHobbyList)
         notifyDataSetChanged()
     }
+
 }
+
+
