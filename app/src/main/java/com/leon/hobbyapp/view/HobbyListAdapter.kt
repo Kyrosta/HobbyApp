@@ -38,10 +38,12 @@ class HobbyListAdapter(val hobbyList: ArrayList<Hobby>)
         }
 
     }
-
-    fun updateHobby(newBeritaList: ArrayList<Hobby>){
+    fun updateHobby(newHobbyList: ArrayList<Hobby>){
         hobbyList.clear()
-        hobbyList.addAll(newBeritaList)
+        hobbyList.addAll(newHobbyList)
         notifyDataSetChanged()
     }
+
 }
+
+

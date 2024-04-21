@@ -54,6 +54,9 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0-alpha03")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.3")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

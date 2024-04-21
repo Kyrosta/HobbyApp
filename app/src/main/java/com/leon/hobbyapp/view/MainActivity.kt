@@ -21,12 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         navController = (supportFragmentManager.findFragmentById(R.id.fragmentHost) as NavHostFragment).navController
-        //NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
+        NavigationUI.setupActionBarWithNavController(this, navController)
         binding.bottomNavigation.setupWithNavController(navController)
-        //NavigationUI.setupWithNavController(binding., navController)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

@@ -53,29 +53,32 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 //        queue?.add(stringRequest)
 //    }
 
-    fun signin(user: String, pass: String) {
-
+    fun signin(username: String, password: String) {
         val url = "http://10.0.2.2/hobbyapp/login.php"
+        queue = Volley.newRequestQueue(getApplication())
+
         val stringRequest = object : StringRequest(
             Method.POST, url,
-            {response->
+            { response ->
                 userLD.value = Gson().fromJson(response, User::class.java)
-                Log.d("Login", "Result: ${response}")
+                Log.d("Login", "Result: $response")
             },
-            {
-                Log.d("Login", it.toString())
+            { error ->
+                Log.e("Login", "Error: ${error.message}")
             }
-        ){
-            override fun getParams(): Map<String, String> {
+        ) {
+            override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-                params["username"] = user
-                params["password"] = pass
+                params["username"] = username
+                params["password"] = password
                 return params
             }
         }
         stringRequest.tag = TAG
         queue?.add(stringRequest)
     }
+
+
 
 //    fun register(id: Int, username:String, firstName: String, lastName: String, email: String, password: String){
 //        loadingLD.value = true
@@ -118,7 +121,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 Log.d("Register", it.toString())
             }
         ) {
-            override fun getParams(): Map<String, String> {
+            override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params["username"] = username
                 params["firstname"] = firstName
@@ -146,7 +149,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 Log.d("Update", it.toString())
             }
         ){
-            override fun getParams(): Map<String, String>? {
+            override fun getParams(): MutableMap<String, String>? {
                 val params = HashMap<String, String>()
                 params["id"] = id.toString()
                 params["firstName"] = firstName
