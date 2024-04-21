@@ -38,7 +38,6 @@ class DetailFragment : Fragment() {
     fun observeViewModel() {
         viewModel.hobbyDetailLD.observe(viewLifecycleOwner, Observer {
             binding.apply {
-
                 txtTitle.text = it.title
                 txtUsername.text = "@${it.createdBy}"
 
@@ -47,32 +46,30 @@ class DetailFragment : Fragment() {
                 val pages = words.chunked(wordLimitPerPage).map { it.joinToString(" ") }
 
                 var currentPageIndex = 0
-                displayPage(currentPageIndex, pages)
-                buttonState(currentPageIndex, pages.size)
+
+                if (currentPageIndex >= 0 && currentPageIndex < pages.size) {
+                    txtDesc.text = pages[currentPageIndex]
+                }
+                btnPrev.isEnabled = currentPageIndex > 0
+                btnNext.isEnabled = currentPageIndex < pages.size - 1
 
                 btnNext.setOnClickListener {
-                    currentPageIndex++
-                    displayPage(currentPageIndex, pages)
-                    buttonState(currentPageIndex, pages.size)
+                    if (currentPageIndex < pages.size - 1) {
+                        currentPageIndex++
+                        txtDesc.text = pages[currentPageIndex]
+                        btnPrev.isEnabled = true
+                        btnNext.isEnabled = currentPageIndex < pages.size - 1
+                    }
                 }
-
                 btnPrev.setOnClickListener {
-                    currentPageIndex--
-                    displayPage(currentPageIndex, pages)
-                    buttonState(currentPageIndex, pages.size)
+                    if (currentPageIndex > 0) {
+                        currentPageIndex--
+                        txtDesc.text = pages[currentPageIndex]
+                        btnPrev.isEnabled = currentPageIndex > 0
+                        btnNext.isEnabled = true
+                    }
                 }
             }
         })
-    }
-
-    fun displayPage(index: Int, pages: List<String>) {
-        if (index >= 0 && index < pages.size) {
-            binding.txtDesc.text = pages[index]
-        }
-    }
-
-    fun buttonState(currentPageIndex: Int, pageCount: Int) {
-        binding.btnPrev.isEnabled = currentPageIndex > 0
-        binding.btnNext.isEnabled = currentPageIndex < pageCount - 1
     }
 }
