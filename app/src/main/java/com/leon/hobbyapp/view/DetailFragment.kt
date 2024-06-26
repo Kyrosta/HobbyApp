@@ -47,9 +47,9 @@ class DetailFragment : Fragment() {
                 txtUsername.text = "@${it.createdBy}"
                 txtDesc.text = it.content
 
-                val wordLimitPerPage = 50
-                val words = it.content?.split(" ") ?: listOf()
-                val pages = words.chunked(wordLimitPerPage).map { it.joinToString(" ") }
+                val wordLimitPerPage = 50 //max per halaman
+                val words = it.content?.split(" ") ?: listOf() //menyimpan content lalu di split
+                val pages = words.chunked(wordLimitPerPage).map { it.joinToString(" ") } //content dibagi123
 
                 var currentPageIndex = 0
 

@@ -51,14 +51,15 @@ class ProfilFragment : Fragment() {
         })
         binding.btnLogout.setOnClickListener {
             logout()
-            Navigation.findNavController(it).navigateUp()
-            val navController = Navigation.findNavController(requireActivity(), R.id.main_navigation_xml)
-            navController.navigate(R.id.actionLogoutFragment)
+//            Navigation.findNavController(it).navigateUp()
+//            val navController = Navigation.findNavController(requireActivity(), R.id.main_navigation_xml)
+//            navController.navigate(R.id.actionLogoutFragment)
         }
     }
 
     fun logout(){
-        viewModel.userLD.value = null
+        //viewModel.userLD.value = null
+        requireActivity().finish()
     }
 
     fun observeViewModel() {
