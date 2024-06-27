@@ -27,34 +27,6 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     val TAG = "volleyTag"
     private var queue: RequestQueue? = null
 
-/*
-    fun signin(user: String, pass: String) {
-        loadingLD.value = true
-        userErrorLD.value = false
-
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/login.php?username=$user&password=$pass"
-
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            {
-                val sType = object: TypeToken<User>() {}.type
-                val result = Gson().fromJson<User>(it, sType)
-                userLD.value = result
-                loadingLD.value = false
-                Log.d("showvolley", it)
-            },
-            {
-                Log.d("showvolley", it.toString())
-                userErrorLD.value = true
-                loadingLD.value = false
-            })
-
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
-    }
-*/
-
     fun signin(username: String, password: String) {
         val url = "http://10.0.2.2/hobbyapp/login.php"
         queue = Volley.newRequestQueue(getApplication())
@@ -79,34 +51,6 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         stringRequest.tag = TAG
         queue?.add(stringRequest)
     }
-
-/*
-    fun register(id: Int, username:String, firstName: String, lastName: String, email: String, password: String){
-        loadingLD.value = true
-        userErrorLD.value = false
-
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/register.php?id=$id&username=$username&firstname=$firstName&lastname=$lastName&email=$email&password=$password"
-        Log.d("url", url)
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            {
-                val sType = object: TypeToken<User>() {}.type
-                val result = Gson().fromJson<User>(it, sType)
-                successLD.value = result
-                loadingLD.value = false
-                Log.d("showvolley", it)
-            },
-            {
-                Log.d("showvolley", it.toString())
-                userErrorLD.value = true
-                loadingLD.value = false
-            })
-
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
-    }
-*/
 
 fun register(username:String, firstName: String, lastName: String, email: String, password: String){
 

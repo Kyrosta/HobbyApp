@@ -23,7 +23,24 @@ data class Hobby(
 ) */
 
 @Entity
-data class Hobby(
+data class User(
+    @ColumnInfo(name = "username")
+    var username: String,
+    @ColumnInfo(name = "firstName")
+    var firstName: String,
+    @ColumnInfo(name = "lastName")
+    var lastName: String,
+    @ColumnInfo(name = "email")
+    var email: String,
+    @ColumnInfo(name = "password")
+    var password: String
+) {
+    @PrimaryKey(autoGenerate = true)
+    var uuid: Int = 0
+}
+
+@Entity
+data class News(
     @ColumnInfo(name="title")
     var title: String,
     @ColumnInfo(name="createdBy")
@@ -32,8 +49,6 @@ data class Hobby(
     var image:String,
     @ColumnInfo(name="description")
     var desc:String,
-    @ColumnInfo(name="content")
-    var content:String,
 ){
     @PrimaryKey(autoGenerate = true)
     var uuid:Int = 0

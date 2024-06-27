@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.leon.hobbyapp.util.DB_NAME
 import com.leon.hobbyapp.util.MIGRATION_1_2
 
-@Database(entities = arrayOf(Hobby::class), version = 4)
+@Database(entities = arrayOf(User::class,News::class), version = 2)
 abstract class HobbyDatabase:RoomDatabase() {
     abstract fun hobbyDao(): HobbyDao
 

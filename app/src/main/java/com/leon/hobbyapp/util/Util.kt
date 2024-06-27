@@ -12,31 +12,37 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.leon.hobbyapp.R
-import com.leon.hobbyapp.model.TodoDatabase
+import com.leon.hobbyapp.model.HobbyDatabase
 import com.leon.hobbyapp.view.MainActivity
 
-val DB_NAME = "newtododb"
+val DB_NAME = "hobbyappdb"
 
 val MIGRATION_1_2 = object : Migration(1,2){
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE todo ADD COLUMN priority INTEGER DEFAULT 3 not null")
+        // Create User table
+        database.execSQL("""
+            CREATE TABLE User (
+                uuid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                username TEXT NOT NULL,
+                firstName TEXT NOT NULL, 
+                lastName TEXT NOT NULL, 
+                email TEXT NOT NULL, 
+                password TEXT NOT NULL, 
+            )
+        """)
+        // Create News Table
+        database.execSQL("""
+            CREATE TABLE News (
+                uuid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                title TEXT NOT NULL, 
+                createdBy TEXT NOT NULL, 
+                image TEXT NOT NULL,
+                desc TEXT NOT NULL
+            )
+        """)
     }
 }
-
-//val MIGRATION_2_3 = object : Migration(2,3){
-//    override fun migrate(database: SupportSQLiteDatabase) {
-//        database.execSQL("ALTER TABLE todo ADD COLUMN is_done INTEGER default 0 not null")
-//    }
-//}
-
-//val MIGRATION_3_4 = object : Migration(3,4){
-//    override fun migrate(database: SupportSQLiteDatabase) {
-//        database.execSQL("ALTER TABLE todo ADD COLUMN todo_date INTEGER default 0 not null")
-//    }
-//}
-
-fun buildDb(context: Context):TodoDatabase{
-    //val db = Room.databaseBuilder(context,TodoDatabase::class.java, DB_NAME).build()
-    val db = TodoDatabase.buildDatabase(context)
+fun buildDb(context: Context):HobbyDatabase{
+    val db = HobbyDatabase.buildDatabase(context)
     return db
 }
