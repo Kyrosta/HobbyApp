@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.leon.hobbyapp.databinding.FragmentDetailBinding
-import com.leon.hobbyapp.model.Hobby
+import com.leon.hobbyapp.model.News
 import com.leon.hobbyapp.viewmodel.DetailViewModel
 import com.leon.hobbyapp.viewmodel.ListViewModel
 import com.squareup.picasso.Picasso
@@ -37,7 +37,7 @@ class DetailFragment : Fragment() {
     }
 
     fun observeViewModel() {
-        viewModel.hobbyDetailLD.observe(viewLifecycleOwner, Observer {
+        viewModel.hobbyLD.observe(viewLifecycleOwner, Observer {
             binding.apply {
                 val picasso = Picasso.Builder(binding.root.context)
                 picasso.listener{picasso, uri, exception -> exception.printStackTrace()}
