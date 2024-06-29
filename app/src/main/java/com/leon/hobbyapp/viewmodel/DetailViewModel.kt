@@ -20,19 +20,12 @@ import kotlin.coroutines.CoroutineContext
 
 class DetailViewModel(application: Application):AndroidViewModel(application), CoroutineScope {
     private val job = Job()
-    val hobbyLD = MutableLiveData<News>()
-
-    fun addTodo(list:List<News>) {
-        launch {
-            val db = buildDb(getApplication())
-            db.hobbyDao().insertAllNews(*list.toTypedArray())
-        }
-    }
+    val newsDetailLD = MutableLiveData<News>()
 
     fun fetch(uuid:Int) {
         launch {
             val db = buildDb(getApplication())
-            hobbyLD.postValue(db.hobbyDao().selectNews(uuid))
+            newsDetailLD.postValue(db.hobbyDao().selectNews(uuid))
         }
     }
 

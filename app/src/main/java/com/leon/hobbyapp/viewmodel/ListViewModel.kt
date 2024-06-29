@@ -10,43 +10,39 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.leon.hobbyapp.model.Hobby
+import com.leon.hobbyapp.model.News
+import com.leon.hobbyapp.util.buildDb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class ListViewModel(application: Application): AndroidViewModel(application) {
-    val hobbyLD = MutableLiveData<ArrayList<Hobby>>()
+class ListViewModel(application: Application): AndroidViewModel(application), CoroutineScope {
+    private val job = Job()
+    val newsLD = MutableLiveData<List<News>>()
     val loadingLD = MutableLiveData<Boolean>()
     val errorLD = MutableLiveData<Boolean>()
-    val TAG = "volleyTag"
-    private var queue: RequestQueue? = null
 
     fun refresh() {
         loadingLD.value = true
         errorLD.value = false
 
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyapp/hobby.json"
-
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            {
-                val sType = object: TypeToken<List<Hobby>>() {}.type
-                val result = Gson().fromJson<List<Hobby>>(it, sType)
-                hobbyLD.value = result as ArrayList<Hobby>?
-                loadingLD.value = false
-                Log.d("showvolley", it)
-            },
-            {
-                Log.d("showvolley", it.toString())
-                errorLD.value = false
-                loadingLD.value = false
-            })
-
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
+        launch {
+            val db = buildDb(getApplication())
+            newsLD.postValue(db.hobbyDao().selectAllNews())
+            loadingLD.postValue(false)
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        queue?.cancelAll(TAG)
+    fun delete(news: News){
+        launch {
+            val db = buildDb(getApplication())
+            db.hobbyDao().deleteNews(news)
+            newsLD.postValue(db.hobbyDao().selectAllNews())
+        }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.IO
 }

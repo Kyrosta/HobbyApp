@@ -1,6 +1,7 @@
 package com.leon.hobbyapp.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,6 @@ class LoginFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,31 +34,30 @@ class LoginFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        viewModel.userLD.observe(viewLifecycleOwner, Observer { user ->
+            if (user != null) {
+                val action = LoginFragmentDirections.actionHomeFragment()
+                Navigation.findNavController(requireView()).navigate(action)
+            } else {
+                Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onButtonClick(v: View) {
-        binding.btnLogin.setOnClickListener {
-            val username = binding.txtUsername.text.toString().trim()
-            val password = binding.txtPwd.text.toString().trim()
-
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.signin(username, password)
-
-                viewModel.userLD.observe(viewLifecycleOwner, Observer { success ->
-                    if (success) {
-                        Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
+        val username = binding.txtUsername.text.toString()
+        val password = binding.txtPwd.text.toString()
+        if(username.isEmpty() || password.isEmpty()){
+            Toast.makeText(context,"Fields cannot be empty!", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.login(username, password)
+            Log.d("Cek","Error")
         }
+
     }
 
     override fun onButtonActionNavClick(v: View) {
-        val action = LoginFragmentDirections.actionHomeFragment()
+        val action = LoginFragmentDirections.actionRegisterFragment()
         Navigation.findNavController(requireView()).navigate(action)
     }
 }

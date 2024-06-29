@@ -14,7 +14,7 @@ interface HobbyDao {
     fun insertAllUser(vararg user: User)
 
     @Query("SELECT * FROM user")
-    fun selectAllUser(): List<News>
+    fun selectAllUser(): List<User>
 
     @Query("SELECT * FROM user WHERE uuid= :id")
     fun selectUser(id:Int): User

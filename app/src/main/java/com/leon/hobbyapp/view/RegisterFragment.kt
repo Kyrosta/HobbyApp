@@ -21,7 +21,7 @@ import com.leon.hobbyapp.model.User
 import com.leon.hobbyapp.viewmodel.UserViewModel
 import org.json.JSONObject
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(), ButtonClickListener {
 
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var viewModel: UserViewModel
@@ -30,7 +30,6 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -39,33 +38,30 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        binding.btnRegister.setOnClickListener {
-            val username = binding.txtUsername.text.toString()
-            val firstName = binding.txtFName.text.toString()
-            val lastName = binding.txtLName.text.toString()
-            val email = binding.txtEmail.text.toString()
-            val password = binding.txtPwd.text.toString()
-            val confPwd = binding.txtPwd2.text.toString()
-
-            if (password == confPwd) {
-                viewModel.register(username, firstName, lastName, email, password)
-                observeViewModel()
-            } else {
-                Toast.makeText(requireContext(), "Password and confirm password do not match", Toast.LENGTH_SHORT).show()
-            }
-        }
-        observeViewModel()
-    }
-
-    fun observeViewModel(){
-        viewModel.userLD.observe(viewLifecycleOwner, Observer {
-            if (it != null){
+        viewModel.registerLD.observe(viewLifecycleOwner, Observer { success ->
+            if (success) {
                 val action = RegisterFragmentDirections.actionLoginFragment()
                 Navigation.findNavController(requireView()).navigate(action)
-            }
-            else{
-                Toast.makeText(this.context, "Register failed!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onButtonClick(v: View) {
+        val username = binding.txtUsername.text.toString()
+        val firstName = binding.txtFName.text.toString()
+        val lastName = binding.txtLName.text.toString()
+        val email = binding.txtEmail.text.toString()
+        val password = binding.txtPwd.text.toString()
+        val confPwd = binding.txtPwd2.text.toString()
+
+        if (password == confPwd) {
+            val user = User(username, firstName, lastName, email, password)
+            viewModel.register(user)
+            Log.d("Cek","Error")
+        } else {
+            Toast.makeText(requireContext(), "Password and confirm password do not match", Toast.LENGTH_SHORT).show()
+        }
     }
 }

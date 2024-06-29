@@ -11,15 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leon.hobbyapp.R
 import com.leon.hobbyapp.databinding.FragmentHomeBinding
-import com.leon.hobbyapp.model.Hobby
+import com.leon.hobbyapp.model.News
 import com.leon.hobbyapp.viewmodel.ListViewModel
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val hobby = arrayListOf<Hobby>()
-    private val adapter = HobbyListAdapter(hobby)
+    private val news = arrayListOf<News>()
+    private val adapter = HobbyListAdapter(news)
     private lateinit var viewModel : ListViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
     }
 
     fun observeViewModel(){
-        viewModel.hobbyLD.observe(viewLifecycleOwner, Observer { adapter.updateHobby(it) })
+        viewModel.newsLD.observe(viewLifecycleOwner, Observer { adapter.updateNews(it) })
         viewModel.loadingLD.observe(viewLifecycleOwner, Observer {
             if(it == true){
                 binding.recyclerView.visibility = View.GONE

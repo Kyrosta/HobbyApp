@@ -16,7 +16,7 @@ import com.leon.hobbyapp.databinding.FragmentProfilBinding
 import com.leon.hobbyapp.model.User
 import com.leon.hobbyapp.viewmodel.UserViewModel
 
-class ProfilFragment : Fragment() {
+class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     private lateinit var binding: FragmentProfilBinding
     private lateinit var viewModel: UserViewModel
 
@@ -30,45 +30,17 @@ class ProfilFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.listener = this
+        binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        viewModel.signin("username","password") //memanggil data user
-        viewModel.userLD.observe(viewLifecycleOwner, Observer {user->
-            user?.let{
-                binding.txtChangeFName.setText(it.firstName)
-                binding.txtChangeLName.setText(it.lastName)
-
-                binding.btnUpdate.setOnClickListener {
-                    val firstName = binding.txtChangeFName.text.toString()
-                    val lastName = binding.txtChangeLName.text.toString()
-                    val newPassword = binding.txtChangePassword.text.toString()
-
-                    viewModel.update(it.id,firstName, lastName, newPassword)
-                    observeViewModel()
-                }
-            }
-        })
-        binding.btnLogout.setOnClickListener {
-            logout()
-//            Navigation.findNavController(it).navigateUp()
-//            val navController = Navigation.findNavController(requireActivity(), R.id.main_navigation_xml)
-//            navController.navigate(R.id.actionLogoutFragment)
-        }
     }
 
-    fun logout(){
-        //viewModel.userLD.value = null
-        requireActivity().finish()
+    override fun onButtonActionNavClick(v: View) {
+        TODO("Not yet implemented")
     }
 
-    fun observeViewModel() {
-        viewModel.userLD.observe(viewLifecycleOwner, Observer { success ->
-            if (success != null) {
-                Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show()
-            }
-        })
+    override fun onButtonClick(v: View) {
+        TODO("Not yet implemented")
     }
 }
