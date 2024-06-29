@@ -1,15 +1,16 @@
 package com.leon.hobbyapp.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.leon.hobbyapp.databinding.CardItemBinding
-import com.leon.hobbyapp.model.Hobby
+import com.leon.hobbyapp.model.News
 import com.squareup.picasso.Picasso
 
-class HobbyListAdapter(val hobbyList: ArrayList<Hobby>)
-    : RecyclerView.Adapter<HobbyListAdapter.HobbyViewHolder>() {
+class HobbyListAdapter(val newsList: ArrayList<News>)
+    : RecyclerView.Adapter<HobbyListAdapter.HobbyViewHolder>(), ButtonActionNav {
     class HobbyViewHolder(val binding: CardItemBinding)
         : RecyclerView.ViewHolder(binding.root)
 
@@ -19,31 +20,28 @@ class HobbyListAdapter(val hobbyList: ArrayList<Hobby>)
     }
 
     override fun getItemCount(): Int {
-        return hobbyList.size
+        return newsList.size
     }
 
     override fun onBindViewHolder(holder: HobbyViewHolder, position: Int) {
-        val currHobby =hobbyList[position]
-        holder.binding.txtTitle.text = currHobby.title
-        holder.binding.txtUsername.text = currHobby.createdBy
-        holder.binding.txtDesc.text = currHobby.description
+        holder.binding.nav = this
+        holder.binding.news = newsList[position]
 
         val picasso = Picasso.Builder(holder.binding.root.context)
         picasso.listener{picasso, uri, exception -> exception.printStackTrace()}
-        picasso.build().load(hobbyList[position].imageUrl).into(holder.binding.imgPhoto)
-
-        holder.binding.btnDetail.setOnClickListener {
-            val action = HomeFragmentDirections.actionDetailFragment(currHobby.id.toString().toInt())
-            Navigation.findNavController(it).navigate(action)
-        }
-
+        picasso.build().load(newsList[position].image).into(holder.binding.imgPhoto)
     }
-    fun updateHobby(newHobbyList: ArrayList<Hobby>){
-        hobbyList.clear()
-        hobbyList.addAll(newHobbyList)
+    fun updateNews(newNewsList: List<News>){
+        newsList.clear()
+        newsList.addAll(newNewsList)
         notifyDataSetChanged()
     }
 
+    override fun onButtonActionNavClick(v: View) {
+        val id = v.tag.toString()
+        val action = HomeFragmentDirections.actionDetailFragment(id.toInt())
+        Navigation.findNavController(v).navigate(action)
+    }
 }
 
 
