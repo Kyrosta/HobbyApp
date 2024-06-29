@@ -41,6 +41,7 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     }
 
     override fun onButtonClick(v: View) {
-        TODO("Not yet implemented")
+        val action = ProfilFragmentDirections.actionLogoutFragment()
+        Navigation.findNavController(requireView()).navigate(action)
     }
 }

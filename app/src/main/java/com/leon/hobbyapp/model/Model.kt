@@ -22,22 +22,22 @@ data class Hobby(
     val content: String?,
 ) */
 
-@Entity
-data class User(
-    @ColumnInfo(name = "username")
-    var username: String,
-    @ColumnInfo(name = "firstName")
-    var firstName: String,
-    @ColumnInfo(name = "lastName")
-    var lastName: String,
-    @ColumnInfo(name = "email")
-    var email: String,
-    @ColumnInfo(name = "password")
-    var password: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var uuid: Int = 0
-}
+    @Entity
+    data class User(
+        @ColumnInfo(name = "username")
+        var username: String,
+        @ColumnInfo(name = "firstName")
+        var firstName: String,
+        @ColumnInfo(name = "lastName")
+        var lastName: String,
+        @ColumnInfo(name = "email")
+        var email: String,
+        @ColumnInfo(name = "password")
+        var password: String
+    ) {
+        @PrimaryKey(autoGenerate = true)
+        var uuid: Int = 0
+    }
 
 @Entity
 data class News(

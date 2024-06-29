@@ -15,34 +15,17 @@ import com.leon.hobbyapp.R
 import com.leon.hobbyapp.model.HobbyDatabase
 import com.leon.hobbyapp.view.MainActivity
 
-val DB_NAME = "hobbyappdb"
+val DB_NAME = "newsdb"
 
-val MIGRATION_1_2 = object : Migration(1,2){
-    override fun migrate(database: SupportSQLiteDatabase) {
-        // Create User table
-        database.execSQL("""
-            CREATE TABLE User (
-                uuid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                username TEXT NOT NULL,
-                firstName TEXT NOT NULL, 
-                lastName TEXT NOT NULL, 
-                email TEXT NOT NULL, 
-                password TEXT NOT NULL, 
-            )
-        """)
-        // Create News Table
-        database.execSQL("""
-            CREATE TABLE News (
-                uuid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-                title TEXT NOT NULL, 
-                createdBy TEXT NOT NULL, 
-                image TEXT NOT NULL,
-                desc TEXT NOT NULL
-            )
-        """)
-    }
-}
 fun buildDb(context: Context):HobbyDatabase{
     val db = HobbyDatabase.buildDatabase(context)
     return db
+}
+
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE user ADD COLUMN email VARCHAR(45) DEFAULT '' NOT NULL"
+        )
+    }
 }

@@ -34,14 +34,6 @@ class LoginFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        viewModel.userLD.observe(viewLifecycleOwner, Observer { user ->
-            if (user != null) {
-                val action = LoginFragmentDirections.actionHomeFragment()
-                Navigation.findNavController(requireView()).navigate(action)
-            } else {
-                Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     override fun onButtonClick(v: View) {
@@ -51,9 +43,16 @@ class LoginFragment : Fragment(), ButtonActionNav, ButtonClickListener {
             Toast.makeText(context,"Fields cannot be empty!", Toast.LENGTH_SHORT).show()
         } else {
             viewModel.login(username, password)
-            Log.d("Cek","Error")
+            viewModel.loginLD.observe(viewLifecycleOwner, Observer { isLogin ->
+                if (isLogin!!){
+                    val action = LoginFragmentDirections.actionHomeFragment()
+                    Navigation.findNavController(requireView()).navigate(action)
+                    Toast.makeText(requireContext(), "Login Success!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
-
     }
 
     override fun onButtonActionNavClick(v: View) {

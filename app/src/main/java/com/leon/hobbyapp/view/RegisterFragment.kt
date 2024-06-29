@@ -36,16 +36,9 @@ class RegisterFragment : Fragment(), ButtonClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.listener = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        viewModel.registerLD.observe(viewLifecycleOwner, Observer { success ->
-            if (success) {
-                val action = RegisterFragmentDirections.actionLoginFragment()
-                Navigation.findNavController(requireView()).navigate(action)
-            } else {
-                Toast.makeText(requireContext(), "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     override fun onButtonClick(v: View) {
@@ -56,10 +49,22 @@ class RegisterFragment : Fragment(), ButtonClickListener {
         val password = binding.txtPwd.text.toString()
         val confPwd = binding.txtPwd2.text.toString()
 
+        if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || confPwd.isEmpty()) {
+            Toast.makeText(requireContext(), "All fields must be filled", Toast.LENGTH_SHORT).show()
+            return
+        }
         if (password == confPwd) {
             val user = User(username, firstName, lastName, email, password)
             viewModel.register(user)
-            Log.d("Cek","Error")
+            viewModel.registerLD.observe(viewLifecycleOwner, Observer { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "Account Created!", Toast.LENGTH_SHORT).show()
+                    val action = RegisterFragmentDirections.actionLoginFragment()
+                    Navigation.findNavController(requireView()).navigate(action)
+                } else {
+                    Toast.makeText(requireContext(), "Account Creation Failed", Toast.LENGTH_SHORT).show()
+                }
+            })
         } else {
             Toast.makeText(requireContext(), "Password and confirm password do not match", Toast.LENGTH_SHORT).show()
         }
