@@ -3,6 +3,7 @@ package com.leon.hobbyapp.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,11 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
+        val username = sharedPref.getString("username","")
+        binding.txtShowUsername.setText(username)
+        val email = sharedPref.getString("email","")
+        binding.txtShowEmail.setText(email)
     }
 
     override fun onButtonActionNavClick(v: View) {
@@ -48,11 +54,6 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     }
 
     override fun onButtonClick(v: View) {
-        val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("username","")
-        binding.txtShowUsername.setText(username)
-        val email = sharedPref.getString("email","")
-        binding.txtShowEmail.setText(email)
         val newPassword = binding.txtChangePassword.text.toString()
 
         if (newPassword.isNotEmpty()) {
@@ -68,5 +69,6 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         } else {
             Toast.makeText(requireContext(), "All fields must not be empty", Toast.LENGTH_SHORT).show()
         }
+        Log.d("Cek", newPassword.toString())
     }
 }
