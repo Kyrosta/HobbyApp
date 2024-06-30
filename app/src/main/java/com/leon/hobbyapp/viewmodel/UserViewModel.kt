@@ -60,10 +60,10 @@ class UserViewModel(application: Application): AndroidViewModel(application) , C
         }
     }
 
-    fun update(firstName:String, lastName:String, password:String, uuid:Int) {
+    fun update(password:String, uuid:Int) {
         launch {
             val db = buildDb(getApplication())
-            db.hobbyDao().updateUser(firstName, lastName, password, uuid)
+            db.hobbyDao().updateUserPass(password, uuid)
             updateLD.postValue(true)
         }
     }

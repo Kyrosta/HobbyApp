@@ -37,11 +37,30 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     }
 
     override fun onButtonActionNavClick(v: View) {
-        TODO("Not yet implemented")
+        val action = ProfilFragmentDirections.actionLogoutFragment()
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
     override fun onButtonClick(v: View) {
-        val action = ProfilFragmentDirections.actionLogoutFragment()
-        Navigation.findNavController(requireView()).navigate(action)
+        val password = binding.txtChangePassword.text.toString()
+
+        if (password != null) {
+            viewModel.update(password, id)
+            viewModel.updateLD.observe(viewLifecycleOwner, Observer { success ->
+                if (success) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Password successfully changed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(requireContext(), "Password change failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "New password must not be empty", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 }
