@@ -44,6 +44,7 @@ class DetailFragment : Fragment() {
 
                     txtTitle.text = news.title
                     txtUsername.text = "@${news.createdBy}"
+                    txtCategory.text = news.category
                     txtDesc.text = news.desc
 
                     val wordLimitPerPage = 50 //max per halaman

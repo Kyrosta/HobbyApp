@@ -32,6 +32,5 @@ abstract class HobbyDatabase:RoomDatabase() {
                 }
             }
         }
-
     }
 }

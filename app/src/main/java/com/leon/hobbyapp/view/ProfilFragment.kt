@@ -1,5 +1,6 @@
 package com.leon.hobbyapp.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -34,33 +35,39 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        val sharedPrefs = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+        val id = sharedPrefs.getInt("id", 0)
+        viewModel.fetch(id)
     }
 
     override fun onButtonActionNavClick(v: View) {
+        val sharedPrefs = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+        editor.clear()
+        editor.apply()
+
         val action = ProfilFragmentDirections.actionLogoutFragment()
         Navigation.findNavController(requireView()).navigate(action)
     }
 
     override fun onButtonClick(v: View) {
+        val username = binding.txtShowUsername.text.toString()
+        val email = binding.txtShowEmail.text.toString()
         val password = binding.txtChangePassword.text.toString()
 
-        if (password != null) {
-            viewModel.update(password, id)
+        if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+            viewModel.update(username,email,password, id)
             viewModel.updateLD.observe(viewLifecycleOwner, Observer { success ->
                 if (success) {
                     Toast.makeText(
-                        requireContext(),
-                        "Password successfully changed",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        requireContext(),"Profile successfully changed",Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireContext(), "Password change failed", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireContext(), "Profile update failed", Toast.LENGTH_SHORT).show()
                 }
             })
         } else {
-            Toast.makeText(requireContext(), "New password must not be empty", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(requireContext(), "All fields must not be empty", Toast.LENGTH_SHORT).show()
         }
     }
 }

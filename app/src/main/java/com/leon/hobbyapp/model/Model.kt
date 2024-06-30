@@ -47,6 +47,8 @@ data class News(
     var createdBy: String,
     @ColumnInfo(name="imageUrl")
     var image:String,
+    @ColumnInfo(name="category")
+    var category:String,
     @ColumnInfo(name="description")
     var desc:String,
 ){
