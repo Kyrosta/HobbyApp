@@ -35,15 +35,11 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-
-        val sharedPrefs = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
-        val id = sharedPrefs.getInt("id", 0)
-        viewModel.fetch(id)
     }
 
     override fun onButtonActionNavClick(v: View) {
-        val sharedPrefs = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
-        val editor = sharedPrefs.edit()
+        val sharedPref = requireActivity().getSharedPreferences("account", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
         editor.clear()
         editor.apply()
 
@@ -52,18 +48,21 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     }
 
     override fun onButtonClick(v: View) {
-        val username = binding.txtShowUsername.text.toString()
-        val email = binding.txtShowEmail.text.toString()
-        val password = binding.txtChangePassword.text.toString()
+        val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
+        val username = sharedPref.getString("username","")
+        binding.txtShowUsername.setText(username)
+        val email = sharedPref.getString("email","")
+        binding.txtShowEmail.setText(email)
+        val newPassword = binding.txtChangePassword.text.toString()
 
-        if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-            viewModel.update(username,email,password, id)
+        if (newPassword.isNotEmpty()) {
+            viewModel.update(newPassword, id)
             viewModel.updateLD.observe(viewLifecycleOwner, Observer { success ->
                 if (success) {
                     Toast.makeText(
-                        requireContext(),"Profile successfully changed",Toast.LENGTH_SHORT).show()
+                        requireContext(),"Password successfully changed",Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireContext(), "Profile update failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Password update failed", Toast.LENGTH_SHORT).show()
                 }
             })
         } else {

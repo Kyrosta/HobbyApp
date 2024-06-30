@@ -1,5 +1,6 @@
 package com.leon.hobbyapp.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -45,6 +46,17 @@ class LoginFragment : Fragment(), ButtonActionNav, ButtonClickListener {
             viewModel.login(username, password)
             viewModel.loginLD.observe(viewLifecycleOwner, Observer { isLogin ->
                 if (isLogin!!){
+                    val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
+                    var editor = sharedPref.edit()
+                    viewModel.userLD.value?.let { logedin->
+                        editor.putString("id", logedin.uuid.toString())
+                        editor.putString("username", logedin.username)
+                        editor.putString("firstName", logedin.firstName)
+                        editor.putString("lastName", logedin.lastName)
+                        editor.putString("email", logedin.email)
+                        editor.putString("password", logedin.password)
+                        editor.apply()
+                    }
                     val action = LoginFragmentDirections.actionHomeFragment()
                     Navigation.findNavController(requireView()).navigate(action)
                     Toast.makeText(requireContext(), "Login Success!", Toast.LENGTH_SHORT).show()
