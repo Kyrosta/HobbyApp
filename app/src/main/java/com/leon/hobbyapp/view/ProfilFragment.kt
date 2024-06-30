@@ -50,12 +50,13 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
     }
 
     override fun onButtonClick(v: View) {
-        val newPassword = binding.txtChangePassword.text.toString()
+        val oldPassword = binding.txtChangeOldPassword.text.toString()
+        val newPassword = binding.txtChangeNewPassword.text.toString()
         val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
         val uuid = sharedPref.getString("id","")
         val uuidInt = uuid?.toIntOrNull()
 
-        if (newPassword.isNotEmpty()) {
+        if (newPassword.isNotEmpty() && oldPassword==sharedPref.getString("password", "")) {
             if (uuidInt != null) {
                 viewModel.update(newPassword, uuidInt)
             }
@@ -68,8 +69,13 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
                     Toast.makeText(requireContext(), "Password update failed", Toast.LENGTH_SHORT).show()
                 }
             })
-        } else {
+        }
+        if(newPassword.isEmpty())
+        {
             Toast.makeText(requireContext(), "All fields must not be empty", Toast.LENGTH_SHORT).show()
+        }
+        if(oldPassword!=sharedPref.getString("password", "")){
+            Toast.makeText(requireContext(), "The Previous Password Field is Incorrect", Toast.LENGTH_SHORT).show()
         }
         Log.d("Cek", newPassword.toString())
     }

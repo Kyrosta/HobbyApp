@@ -25,6 +25,26 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout13"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Enter Old Password"
+                app:endIconMode="password_toggle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtShowEmail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtChangeOldPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:password="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -35,10 +55,10 @@
                 app:endIconMode="password_toggle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtShowEmail">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout13">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtChangePassword"
+                    android:id="@+id/txtChangeNewPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:password="true"
@@ -93,6 +113,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtShowUsername" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
