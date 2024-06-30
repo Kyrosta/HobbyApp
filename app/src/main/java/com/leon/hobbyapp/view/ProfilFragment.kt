@@ -17,7 +17,7 @@ import com.leon.hobbyapp.databinding.FragmentProfilBinding
 import com.leon.hobbyapp.model.User
 import com.leon.hobbyapp.viewmodel.UserViewModel
 
-class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
+class ProfilFragment : Fragment(), ButtonActionNav, ButtonUpdate {
     private lateinit var binding: FragmentProfilBinding
     private lateinit var viewModel: UserViewModel
 
@@ -31,7 +31,7 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.listener = this
+        binding.update = this
         binding.nav = this
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
@@ -47,7 +47,7 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         Navigation.findNavController(requireView()).navigate(action)
     }
 
-    override fun onButtonClick(v: View) {
+    override fun onButtonUpdateClick(v: View, obj: User) {
         val sharedPref = requireActivity().getSharedPreferences("onAccount", Context.MODE_PRIVATE)
         val username = sharedPref.getString("username","")
         binding.txtShowUsername.setText(username)
@@ -56,7 +56,7 @@ class ProfilFragment : Fragment(), ButtonActionNav, ButtonClickListener {
         val newPassword = binding.txtChangePassword.text.toString()
 
         if (newPassword.isNotEmpty()) {
-            viewModel.update(newPassword, id)
+            viewModel.update(obj.password, id)
             viewModel.updateLD.observe(viewLifecycleOwner, Observer { success ->
                 if (success) {
                     Toast.makeText(

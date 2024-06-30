@@ -8,8 +8,8 @@
             name="user"
             type="com.leon.hobbyapp.model.User" />
         <variable
-            name="listener"
-            type="com.leon.hobbyapp.view.ButtonClickListener" />
+            name="update"
+            type="com.leon.hobbyapp.view.ButtonUpdate" />
         <variable
             name="nav"
             type="com.leon.hobbyapp.view.ButtonActionNav" />
@@ -92,7 +92,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="Update"
-                android:onClick="@{listener::onButtonClick}"
+                android:onClick="@{(view) -> update.onButtonUpdateClick(view,user)}"
                 android:tag="@{user.uuid}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout12" />
